@@ -1,7 +1,7 @@
 {
   "name": "project12",
   "version": "1.0.0",
-  "description": "",
+  "description": "project13 REST API + mongoose.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
