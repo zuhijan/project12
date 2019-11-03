@@ -21,18 +21,26 @@ module.exports.removeCardById = (req, res) => {
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 module.exports.addLike = (req, res) => {
+  // const { cardId } = req.params;
+  const owner = req.user._id;
+
   Card.findByIdAndUpdate(
-    req.params.Id,
-    { $addToSet: { likes: req.user._id } },
+    req.params.cardId,
+    { $addToSet: { likes: owner } },
     { new: true },
   )
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      if (!card) {
+        return res.status(404).json({ message: 'Нет карточки с таким id' });
+      }
+      return res.send(card);
+    })
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.removeLike = (req, res) => {
   Card.findByIdAndUpdate(
-    req.params.Id,
+    req.params.cardId,
     { $pull: { likes: req.user._id } },
     { new: true },
   )
