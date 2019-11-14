@@ -16,9 +16,19 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.removeCardById = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
-    .then((card) => res.send({ data: card }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+  const owner = req.user._id;
+
+  Card.findById(req.params.cardId)
+    .then((card) => {
+      if (owner === card.owner._id) {
+        Card.findByIdAndRemove(req.params.cardId)
+          .then(() => res.status(200).send({ message: 'Карточка удалена' }))
+          .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+      } else {
+        res.status(403).send({ message: 'Недостаточно прав' });
+      }
+    })
+    .catch((err) => res.status(500).send({ message: err.message }));
 };
 module.exports.addLike = (req, res) => {
   // const { cardId } = req.params;
