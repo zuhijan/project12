@@ -1,7 +1,8 @@
+/* eslint-disable arrow-body-style */
 /* eslint-disable func-names */
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const isEmail = require('validator/lib/isEmail');
+const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -19,19 +20,23 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     validate: {
-      validator: (v) => /^(http:[/][/]|https:[/][/])/.test(v),
+      validator: (v) => {
+        return validator.isURL(v);
+      },
       message: (props) => `${props.value} Эта строка должна быть ссылкой!`,
     },
     required: true,
   },
   email: {
     type: String,
-    unique: true,
-    required: true,
     validate: {
-      validator: (v) => isEmail(v),
+      validator: (v) => {
+        return validator.isEmail(v);
+      },
       message: 'Неправильный формат почты',
     },
+    unique: true,
+    required: true,
   },
   password: {
     type: String,

@@ -22,10 +22,14 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-routerUsers.post('/signin', login);
-routerUsers.post('/signup', createUser);
+app.post('/signin', login);
+app.post('/signup', createUser);
 app.use(auth);
-app.use('/', routerUsers);
-app.use('/', routerCards);
+app.use('/users', routerUsers);
+app.use('/cards', routerCards);
+
+app.get('/:someRequest', (req, res) => {
+  res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
+});
 
 app.listen(PORT);

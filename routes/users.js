@@ -6,11 +6,11 @@ const {
 } = require('../controllers/users');
 
 
-routerUsers.get('/users', getUsers);
-routerUsers.get('/users/:id', getUserById);
-routerUsers.get('/:someRequest', (req, res) => {
-  res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
-});
-routerUsers.patch('/users/me', updateProfile);
-routerUsers.patch('/users/me/avatar', updateAvatar);
+routerUsers.get('/', getUsers);
+routerUsers.get('/:id', getUserById);
+// routerUsers.get('/:someRequest', (req, res) => {
+//   res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
+// });
+routerUsers.patch('/me', updateProfile);
+routerUsers.patch('/me/avatar', updateAvatar);
 module.exports = routerUsers;

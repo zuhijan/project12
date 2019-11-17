@@ -17,11 +17,12 @@ module.exports.createCard = (req, res) => {
 
 module.exports.removeCardById = (req, res) => {
   const owner = req.user._id;
+  const { cardId } = req.params;
 
-  Card.findById(req.params.cardId)
+  Card.findById(cardId)
     .then((card) => {
-      if (owner === card.owner._id) {
-        Card.findByIdAndRemove(req.params.cardId)
+      if (owner === card.owner.toString()) {
+        Card.findByIdAndRemove(cardId)
           .then(() => res.status(200).send({ message: 'Карточка удалена' }))
           .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
       } else {

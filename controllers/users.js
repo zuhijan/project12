@@ -36,25 +36,25 @@ module.exports.createUser = (req, res) => {
 module.exports.updateProfile = (req, res) => {
   const { name, about } = req.body;
   const owner = req.user._id;
-  User.findById(owner)
+
+  User.findByIdAndUpdate(owner, { name, about }, { runValidators: true }, { new: true })
+    // eslint-disable-next-line consistent-return
     .then((user) => {
-      if (owner === user._id) {
-        User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
-          .then((users) => res.send({ data: users }))
-          .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
-      } else {
-        res.status(401).send({ message: 'Недостаточно прав' });
+      if (!user) {
+        return res.status(404).json({ message: 'Нет пользователя с таким id' });
       }
+      res.send({ user });
     })
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => res.status(500).send({ message: `Произошла ошибка ${err}` }));
 };
 
 module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
+  const owner = req.user._id;
 
-  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
+  User.findByIdAndUpdate(owner, { avatar }, { runValidators: true }, { new: true })
     .then((user) => res.send({ data: user }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => res.status(500).send({ message: `Произошла ошибка ${err}` }));
 };
 
 module.exports.login = (req, res) => {
@@ -63,8 +63,7 @@ module.exports.login = (req, res) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-      //   res.send({ token });
-      // })
+
       res.cookie('jwt', token, {
         maxAge: 3600000,
         httpOnly: true,
