@@ -2,15 +2,15 @@
 /* eslint-disable quotes */
 const routerUsers = require('express').Router();
 const {
-  getUsers, getUserById, createUser, updateProfile, updateAvatar,
+  getUsers, getUserById, updateProfile, updateAvatar,
 } = require('../controllers/users');
 
-routerUsers.post('/users', createUser);
-routerUsers.get('/users', getUsers);
-routerUsers.get('/users/:id', getUserById);
-routerUsers.get('/:someRequest', (req, res) => {
-  res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
-});
-routerUsers.patch('/users/me', updateProfile);
-routerUsers.patch('/users/me/avatar', updateAvatar);
+
+routerUsers.get('/', getUsers);
+routerUsers.get('/:id', getUserById);
+// routerUsers.get('/:someRequest', (req, res) => {
+//   res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
+// });
+routerUsers.patch('/me', updateProfile);
+routerUsers.patch('/me/avatar', updateAvatar);
 module.exports = routerUsers;
