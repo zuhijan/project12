@@ -1,8 +1,10 @@
+const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
+
 
 module.exports.getUsers = (req, res) => {
   User.find({})
@@ -11,10 +13,15 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUserById = (req, res, next) => {
-  const { userId } = req.params;
-  User.findById(userId)
+  const { id } = req.params;
+
+  console.log(typeof id);
+  console.log(id);
+  console.log(mongoose.Types.ObjectId.isValid(id));
+
+  User.findById(id)
     .then((user) => {
-      if (user == null) {
+      if (!user) {
         // return res.status(404).json({ message: 'Нет пользователя с таким id' });
         throw new NotFoundError('Нет пользователя с таким id');
       }
