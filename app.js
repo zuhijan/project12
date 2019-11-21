@@ -23,6 +23,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
+// eslint-disable-next-line no-console
 console.log(process.env.NODE_ENV);
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -60,8 +61,7 @@ app.use(errorLogger);
 app.use(errors());
 app.use(errorsCentr);
 
-// app.get('/:someRequest', (req, res) => {
-//   res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
-// });
-
+app.get('/:someRequest', (req, res) => {
+  res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
+});
 app.listen(PORT);
