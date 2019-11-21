@@ -23,6 +23,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
+// eslint-disable-next-line no-console
 console.log(process.env.NODE_ENV);
 app.use(cookieParser());
 app.use(bodyParser.json());
