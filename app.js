@@ -61,8 +61,7 @@ app.use(errorLogger);
 app.use(errors());
 app.use(errorsCentr);
 
-// app.get('/:someRequest', (req, res) => {
-//   res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
-// });
-
+app.get('/:someRequest', (req, res) => {
+  res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
+});
 app.listen(PORT);
